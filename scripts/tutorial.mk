@@ -48,7 +48,7 @@ endif
 ifeq ($(ARCH),darwin)
 INSTALLPATH.darwin = $(HOME)/.od/rear
 CFLAGS.darwin = -Wno-deprecated-declarations -march=native -fPIC
-LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
+LFLAGS = -shared -undefined dynamic_lookup
 includes += $(SDKPATH)/emu
 include $(SDKPATH)/scripts/darwin.mk
 endif

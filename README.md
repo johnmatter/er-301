@@ -47,6 +47,8 @@ sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig z
 brew install gcc sdl2 sdl2_ttf fftw swig zip
 ```
 
+On macOS the build uses the newest versioned GCC (`gcc-NN`) on your `PATH`.  To use a different one, pass its version number, e.g. `make emu GCC_VERSION=11`.
+
 To compile, execute this in the top directory:
 
 ```bash

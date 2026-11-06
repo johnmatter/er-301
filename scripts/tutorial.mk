@@ -66,7 +66,8 @@ CFLAGS += $(addprefix -I,$(includes))
 CFLAGS += $(addprefix -D,$(symbols))
 
 # swig-specific flags
-SWIGFLAGS = -lua -no-old-metatable-bindings -nomoduleglobal -small -fvirtual
+include $(SDKPATH)/scripts/swig.mk
+SWIGFLAGS = $(SWIG_LUA_FLAGS) -nomoduleglobal -small -fvirtual
 SWIGFLAGS += $(addprefix -I,$(includes)) 
 SWIGFLAGS += -module $(PKGNAME)_$(LIBNAME)
 CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)

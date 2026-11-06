@@ -141,7 +141,8 @@ CFLAGS += $(addprefix -I,$(includes))
 CFLAGS += $(addprefix -D,$(symbols))
 
 # swig-specific flags
-SWIGFLAGS = -lua -no-old-metatable-bindings
+include scripts/swig.mk
+SWIGFLAGS = $(SWIG_LUA_FLAGS)
 SWIGFLAGS += $(addprefix -I,$(includes)) 
 # Replace speed optimization flags with size optimization flags.
 CFLAGS.swig = $(subst $(CFLAGS.speed),$(CFLAGS.size),$(CFLAGS))

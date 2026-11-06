@@ -14,7 +14,7 @@ namespace emu
                               SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED,
                               SCREEN_WIDTH, SCREEN_HEIGHT,
-                              SDL_WINDOW_SHOWN);
+                              SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (window == NULL)
     {
       logFatal("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -44,6 +44,10 @@ namespace emu
     {
       logFatal("Failed to create sub texture: %s", SDL_GetError());
     }
+
+    // Show the OLED pixels as crisp squares instead of blurring them.
+    SDL_SetTextureScaleMode(mainTexture, SDL_ScaleModeNearest);
+    SDL_SetTextureScaleMode(subTexture, SDL_ScaleModeNearest);
 
     pixelFormat = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
   }
@@ -203,6 +207,14 @@ namespace emu
   void Window::update(uint8_t *mainFrame, uint8_t *subFrame)
   {
     static tick_t timestamp = ticks();
+
+    // Re-apply the render scale every frame: resizing the window can reset it,
+    // and on a high-DPI display the drawable has more pixels than the window.
+    int windowW, windowH, outputW, outputH;
+    SDL_GetWindowSize(window, &windowW, &windowH);
+    SDL_GetRendererOutputSize(renderer, &outputW, &outputH);
+    float density = windowW > 0 ? (float)outputW / windowW : 1.0f;
+    SDL_RenderSetScale(renderer, scale * density, scale * density);
 
     SDL_SetRenderDrawColor(renderer, P_GRAY, P_GRAY, P_GRAY, 255);
     SDL_RenderClear(renderer);
